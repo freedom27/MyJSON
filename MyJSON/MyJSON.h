@@ -6,7 +6,7 @@
 //  Copyright © 2015 Stefano Vettor. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import Foundation;
 
 //! Project version number for MyJSON.
 FOUNDATION_EXPORT double MyJSONVersionNumber;

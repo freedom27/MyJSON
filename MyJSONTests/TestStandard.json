@@ -1,0 +1,70 @@
+{
+    "object_id": "1234567",
+    "creation_date": "27/12/2014 07:30:15.777",
+    "priority": 7,
+    "is_json": true,
+    "is_xml": false,
+    "related_objects_ids": ["11111","222222","4444444","7777777"],
+    "arrayception": [["11","22"],["33","44"]],
+    "fibonacci": [1,2,3,5,8,13,21],
+    "fibonacci_not_integer": [1.1,2.2,3.3,5.5,8.8,14.3,23.1],
+    "boolean_array": [true, true, false, true, false],
+    "sub_object": {
+        "object_id": "234234",
+        "creation_date": "28/10/2013 08:37:18.777",
+        "priority": 4.7,
+        "is_json": true,
+        "is_xml": false,
+        "related_objects_ids": ["32433","5646","36463","6799679"],
+        "arrayception": [["11","22"],["33","44"]],
+        "integer_array": [0,4,8,5,7,13,27,2],
+        "comma_array": [2.1,5.2,22.3,7.5,9.8,141.3,203.1],
+        "boolean_array": [true, true, false, true, false]
+    },
+    "sub_objects": [
+        {
+            "object_id": "657567",
+            "creation_date": "26/11/2014 17:30:15.777",
+            "priority": 7,
+            "is_json": true,
+            "is_xml": false,
+            "related_objects_ids": ["234234","5464","6575756","7686786"],
+            "fibonacci": [1,2,3,5,8,13,21],
+            "fibonacci_not_integer": [1.1,2.2,3.3,5.5,8.8,14.3,23.1],
+            "boolean_array": [true, true, false, true, false],
+            "sub_object": {
+                "object_id": "234234",
+                "creation_date": "28/10/2013 08:37:18.777",
+                "priority": 4.7,
+                "is_json": true,
+                "is_xml": false,
+                "related_objects_ids": ["32433","5646","36463","6799679"],
+                "integer_array": [0,4,8,5,7,13,27,2],
+                "comma_array": [2.1,5.2,22.3,7.5,9.8,141.3,203.1],
+                "boolean_array": [true, true, false, true, false]
+            }
+        },
+        {
+            "object_id": "7989797",
+            "creation_date": "17/02/2011 09:34:05.777",
+            "priority": 7,
+            "is_json": true,
+            "is_xml": false,
+            "related_objects_ids": ["432423","56456","768678","65336585"],
+            "fibonacci": [1,2,3,5,8,13,21],
+            "fibonacci_not_integer": [1.1,2.2,3.3,5.5,8.8,14.3,23.1],
+            "boolean_array": [true, true, false, true, false],
+            "sub_object": {
+                "object_id": "234234",
+                "creation_date": "28/10/2013 08:37:18.777",
+                "priority": 4.7,
+                "is_json": true,
+                "is_xml": false,
+                "related_objects_ids": ["32433","5646","36463","6799679"],
+                "integer_array": [0,4,8,5,7,13,27,2],
+                "comma_array": [2.1,5.2,22.3,7.5,9.8,141.3,203.1],
+                "boolean_array": [true, true, false, true, false]
+            }
+        }
+    ]
+}
