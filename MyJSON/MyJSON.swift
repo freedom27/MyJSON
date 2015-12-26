@@ -27,6 +27,10 @@ extension JSON {
         return _jsonObject?[key] as? T
     }
     
+    private func attributeForKeyPath<T>(keys: [String]) -> T? {
+        return keys.reduce( _jsonObject, combine: { element, key in element?[key] }) as? T
+    }
+    
     private func elementAtIndex<T>(index: Int) -> T? {
         if let array = _jsonObject as? [T] {
             return array[array.startIndex.advancedBy(index)]
@@ -37,58 +41,109 @@ extension JSON {
 
 // MARK:- key subscripts returning basic types
 extension JSON {
-    public subscript(key: String) -> JSON {
-        return JSON(object: _jsonObject?[key])
+    public subscript(keys: String...) -> JSON {
+        return JSON(object: attributeForKeyPath(keys))
     }
     
-    public subscript(key: String) -> String? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> String? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> Bool? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> Bool? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> Int? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> Int? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> Double? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> Double? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> Float? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> Float? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> JSON {
+        return JSON(object: attributeForKeyPath(keys))
+    }
+    
+    public subscript(keys: [String]) -> String? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> Bool? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> Int? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> Double? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> Float? {
+        return attributeForKeyPath(keys)
     }
 }
 
 // MARK:- key subscripts returning arrays
 extension JSON {
-    public subscript(key: String) -> [JSON]? {
-        if let objectArray: [AnyObject] = attributeForKey(key) {
+    public subscript(keys: String...) -> [JSON]? {
+        if let objectArray: [AnyObject] = attributeForKeyPath(keys) {
             return objectArray.map{JSON(object: $0)}
         }
         return .None
     }
     
-    public subscript(key: String) -> [String]? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> [String]? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> [Bool]? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> [Bool]? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> [Int]? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> [Int]? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> [Double]? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> [Double]? {
+        return attributeForKeyPath(keys)
     }
     
-    public subscript(key: String) -> [Float]? {
-        return attributeForKey(key)
+    public subscript(keys: String...) -> [Float]? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> [JSON]? {
+        if let objectArray: [AnyObject] = attributeForKeyPath(keys) {
+            return objectArray.map{JSON(object: $0)}
+        }
+        return .None
+    }
+    
+    public subscript(keys: [String]) -> [String]? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> [Bool]? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> [Int]? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> [Double]? {
+        return attributeForKeyPath(keys)
+    }
+    
+    public subscript(keys: [String]) -> [Float]? {
+        return attributeForKeyPath(keys)
     }
 }
 

@@ -304,6 +304,7 @@ class MyJSONTests: XCTestCase {
         let jObject = JSON(data: testData)
         
         XCTAssertEqual(jObject["sub_object"]["object_id"], "234234")
+        XCTAssertEqual(jObject["sub_object", "object_id"], "234234")
         XCTAssertEqual(jObject["sub_object"]["object_id"].string, "234234")
         XCTAssertEqual(jObject["sub_object"]["object_id"].string, jObject["sub_object"]["object_id"])
         
@@ -606,6 +607,8 @@ class MyJSONTests: XCTestCase {
         let jObject = JSON(data: testData)
         
         XCTAssertTrue(jObject["sub_object"]["arrayception"].count == 2)
+        XCTAssertTrue(jObject["sub_object", "arrayception"].count == 2)
+        XCTAssertTrue(jObject[["sub_object", "arrayception"]].count == 2)
         XCTAssertEqual(jObject["sub_object"]["arrayception"][0][0], "11")
         XCTAssertEqual(jObject["sub_object"]["arrayception"][0][1].string, "22")
         XCTAssertEqual(jObject["sub_object"]["arrayception"][1][0], "33")
@@ -807,6 +810,288 @@ class MyJSONTests: XCTestCase {
         XCTAssertNotEqual(rawData as? NSDictionary, .None)
         XCTAssertEqual(rawData as? NSDictionary, jRawObj.rawValue as? NSDictionary)
         
+    }
+    
+    func testVariadicSubscripts() {
+        let jObject = JSON(data: testData)
+        
+        XCTAssertEqual(jObject["sub_object", "object_id"], "234234")
+        XCTAssertEqual(jObject["sub_object", "object_id"].string, "234234")
+        XCTAssertEqual(jObject["sub_object", "object_id"].string, jObject["sub_object"]["object_id"])
+        
+        XCTAssertEqual(jObject["sub_object", "priority"].integer, 4)
+        
+        XCTAssertEqual(jObject["sub_object", "priority"], 4.7)
+        XCTAssertEqual(jObject["sub_object", "priority"].double, 4.7)
+        
+        XCTAssertEqual(jObject["sub_object", "is_json"], true)
+        XCTAssertEqual(jObject["sub_object", "is_json"].bool, true)
+        
+        XCTAssertTrue(jObject["sub_object", "related_objects_ids"].count == 4)
+        XCTAssertEqual(jObject["sub_object", "related_objects_ids"][0], "32433")
+        XCTAssertEqual(jObject["sub_object", "related_objects_ids"][1], "5646")
+        
+        XCTAssertEqual(jObject["sub_object", "integer_array"][1].integer, 4)
+        XCTAssertEqual(jObject["sub_object", "integer_array"][2].integer, 8)
+        
+        XCTAssertEqual(jObject["sub_objects"][0]["sub_object", "creation_date"], "28/10/2013 08:37:18.777")
+        XCTAssertEqual(jObject["sub_objects"][1]["sub_object", "creation_date"].string, "28/10/2013 08:37:18.777")
+        
+        XCTAssertEqual(jObject["sub_objects"][0]["sub_object", "related_objects_ids"][0], "32433")
+        XCTAssertEqual(jObject["sub_objects"][0]["sub_object", "comma_array"][2], 22.3)
+        XCTAssertEqual(jObject["sub_objects"][1]["sub_object", "comma_array"][2].double, 22.3)
+        
+        let testStrArray = ["32433","5646","36463","6799679"]
+        var index = 0
+        for strElement: String in jObject["sub_object", "related_objects_ids"]! {
+            XCTAssertEqual(strElement, testStrArray[index++])
+        }
+        
+        index = 0
+        for strElement in jObject["sub_object", "related_objects_ids"].stringArray! {
+            XCTAssertEqual(strElement, testStrArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "related_objects_ids"] {
+            XCTAssertEqual(jsonElement.string, testStrArray[index++])
+        }
+        
+        let testIntArray = [0,4,8,5,7,13,27,2]
+        index = 0
+        for intElement: Int in jObject["sub_object", "integer_array"]! {
+            XCTAssertEqual(intElement, testIntArray[index++])
+        }
+        
+        index = 0
+        for intElement in jObject["sub_object", "integer_array"].integerArray! {
+            XCTAssertEqual(intElement, testIntArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "integer_array"] {
+            XCTAssertEqual(jsonElement.integer, testIntArray[index++])
+        }
+        
+        let testDoubleArray = [2.1,5.2,22.3,7.5,9.8,141.3,203.1]
+        index = 0
+        for doubleElement: Double in jObject["sub_object", "comma_array"]! {
+            XCTAssertEqual(doubleElement, testDoubleArray[index++])
+        }
+        
+        index = 0
+        for doubleElement in jObject["sub_object", "comma_array"].doubleArray! {
+            XCTAssertEqual(doubleElement, testDoubleArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "comma_array"] {
+            XCTAssertEqual(jsonElement.double, testDoubleArray[index++])
+        }
+        
+        let testBoolArray = [true, true, false, true, false]
+        index = 0
+        for boolElement: Bool in jObject["sub_object", "boolean_array"]! {
+            XCTAssertEqual(boolElement, testBoolArray[index++])
+        }
+        
+        index = 0
+        for boolElement in jObject["sub_object", "boolean_array"].boolArray! {
+            XCTAssertEqual(boolElement, testBoolArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "boolean_array"] {
+            XCTAssertEqual(jsonElement.bool, testBoolArray[index++])
+        }
+        
+        let testArray = ["11","22","33","44"]
+        index = 0
+        
+        for jsonElement in jObject["sub_object", "arrayception"] {
+            for jsonSubElement in  jsonElement {
+                XCTAssertEqual(jsonSubElement.string, testArray[index++])
+            }
+        }
+        
+        index = 0
+        var subArray: [String]? = jObject["sub_object", "arrayception"][0]
+        for string in subArray! {
+            XCTAssertEqual(string, testArray[index++])
+        }
+        subArray = jObject["sub_object", "arrayception"][1].stringArray
+        for string in subArray! {
+            XCTAssertEqual(string, testArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "arrayception"] {
+            for jsonSubElement in  jsonElement {
+                XCTAssertEqual(~jsonSubElement, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "arrayception"] {
+            for stringSubElement in  jsonElement.stringArray! {
+                XCTAssertEqual(stringSubElement, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "arrayception"].jsonArray! {
+            for jsonSubElement in  jsonElement.jsonArray! {
+                XCTAssertEqual(jsonSubElement.string, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject["sub_object", "arrayception"].jsonArray! {
+            for stringSubElement in  jsonElement.stringArray! {
+                XCTAssertEqual(stringSubElement, testArray[index++])
+            }
+        }
+    }
+    
+    func testArraySubscripts() {
+        let jObject = JSON(data: testData)
+        
+        XCTAssertEqual(jObject[["sub_object", "object_id"]], "234234")
+        XCTAssertEqual(jObject[["sub_object", "object_id"]].string, "234234")
+        XCTAssertEqual(jObject[["sub_object", "object_id"]].string, jObject["sub_object"]["object_id"])
+        
+        XCTAssertEqual(jObject[["sub_object", "priority"]].integer, 4)
+        
+        XCTAssertEqual(jObject[["sub_object", "priority"]], 4.7)
+        XCTAssertEqual(jObject[["sub_object", "priority"]].double, 4.7)
+        
+        XCTAssertEqual(jObject[["sub_object", "is_json"]], true)
+        XCTAssertEqual(jObject[["sub_object", "is_json"]].bool, true)
+        
+        XCTAssertTrue(jObject[["sub_object", "related_objects_ids"]].count == 4)
+        XCTAssertEqual(jObject[["sub_object", "related_objects_ids"]][0], "32433")
+        XCTAssertEqual(jObject[["sub_object", "related_objects_ids"]][1], "5646")
+        
+        XCTAssertEqual(jObject[["sub_object", "integer_array"]][1].integer, 4)
+        XCTAssertEqual(jObject[["sub_object", "integer_array"]][2].integer, 8)
+        
+        XCTAssertEqual(jObject["sub_objects"][0][["sub_object", "creation_date"]], "28/10/2013 08:37:18.777")
+        XCTAssertEqual(jObject["sub_objects"][1][["sub_object", "creation_date"]].string, "28/10/2013 08:37:18.777")
+        
+        XCTAssertEqual(jObject["sub_objects"][0][["sub_object", "related_objects_ids"]][0], "32433")
+        XCTAssertEqual(jObject["sub_objects"][0][["sub_object", "comma_array"]][2], 22.3)
+        XCTAssertEqual(jObject["sub_objects"][1][["sub_object", "comma_array"]][2].double, 22.3)
+        
+        let testStrArray = ["32433","5646","36463","6799679"]
+        var index = 0
+        for strElement: String in jObject[["sub_object", "related_objects_ids"]]! {
+            XCTAssertEqual(strElement, testStrArray[index++])
+        }
+        
+        index = 0
+        for strElement in jObject[["sub_object", "related_objects_ids"]].stringArray! {
+            XCTAssertEqual(strElement, testStrArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "related_objects_ids"]] {
+            XCTAssertEqual(jsonElement.string, testStrArray[index++])
+        }
+        
+        let testIntArray = [0,4,8,5,7,13,27,2]
+        index = 0
+        for intElement: Int in jObject[["sub_object", "integer_array"]]! {
+            XCTAssertEqual(intElement, testIntArray[index++])
+        }
+        
+        index = 0
+        for intElement in jObject[["sub_object", "integer_array"]].integerArray! {
+            XCTAssertEqual(intElement, testIntArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "integer_array"]] {
+            XCTAssertEqual(jsonElement.integer, testIntArray[index++])
+        }
+        
+        let testDoubleArray = [2.1,5.2,22.3,7.5,9.8,141.3,203.1]
+        index = 0
+        for doubleElement: Double in jObject[["sub_object", "comma_array"]]! {
+            XCTAssertEqual(doubleElement, testDoubleArray[index++])
+        }
+        
+        index = 0
+        for doubleElement in jObject[["sub_object", "comma_array"]].doubleArray! {
+            XCTAssertEqual(doubleElement, testDoubleArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "comma_array"]] {
+            XCTAssertEqual(jsonElement.double, testDoubleArray[index++])
+        }
+        
+        let testBoolArray = [true, true, false, true, false]
+        index = 0
+        for boolElement: Bool in jObject[["sub_object", "boolean_array"]]! {
+            XCTAssertEqual(boolElement, testBoolArray[index++])
+        }
+        
+        index = 0
+        for boolElement in jObject[["sub_object", "boolean_array"]].boolArray! {
+            XCTAssertEqual(boolElement, testBoolArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "boolean_array"]] {
+            XCTAssertEqual(jsonElement.bool, testBoolArray[index++])
+        }
+        
+        let testArray = ["11","22","33","44"]
+        index = 0
+        
+        for jsonElement in jObject[["sub_object", "arrayception"]] {
+            for jsonSubElement in  jsonElement {
+                XCTAssertEqual(jsonSubElement.string, testArray[index++])
+            }
+        }
+        
+        index = 0
+        var subArray: [String]? = jObject[["sub_object", "arrayception"]][0]
+        for string in subArray! {
+            XCTAssertEqual(string, testArray[index++])
+        }
+        subArray = jObject[["sub_object", "arrayception"]][1].stringArray
+        for string in subArray! {
+            XCTAssertEqual(string, testArray[index++])
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "arrayception"]] {
+            for jsonSubElement in  jsonElement {
+                XCTAssertEqual(~jsonSubElement, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "arrayception"]] {
+            for stringSubElement in  jsonElement.stringArray! {
+                XCTAssertEqual(stringSubElement, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "arrayception"]].jsonArray! {
+            for jsonSubElement in  jsonElement.jsonArray! {
+                XCTAssertEqual(jsonSubElement.string, testArray[index++])
+            }
+        }
+        
+        index = 0
+        for jsonElement in jObject[["sub_object", "arrayception"]].jsonArray! {
+            for stringSubElement in  jsonElement.stringArray! {
+                XCTAssertEqual(stringSubElement, testArray[index++])
+            }
+        }
     }
     
 }
