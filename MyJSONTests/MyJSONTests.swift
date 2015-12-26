@@ -1094,4 +1094,14 @@ class MyJSONTests: XCTestCase {
         }
     }
     
+    func testEmptyKeyPath() {
+        let jObject = JSON(data: testData)
+        
+        let emptyArray = [String]()
+        XCTAssertEqual(jObject[emptyArray], jObject)
+        XCTAssertEqual(jObject[emptyArray]["sub_object"]["object_id"], "234234")
+        XCTAssertEqual(jObject[emptyArray]["sub_object"]["object_id"].string, "234234")
+        XCTAssertEqual(jObject[emptyArray]["sub_object"]["object_id"].string, jObject["sub_object"]["object_id"])
+    }
+    
 }
